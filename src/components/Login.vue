@@ -40,8 +40,8 @@ export default {
   data() {
     return {
       usermess: {
-        username: "",
-        password: "",
+        username: "admin",
+        password: "123456",
       },
       messRules: {
         username: [
@@ -71,8 +71,11 @@ export default {
       this.$refs.loginFromRef.resetFields();
     },
     login() {
-      this.$refs.loginFromRef.validate((valid) => {
+      this.$refs.loginFromRef.validate(async (valid) => {
         if (!valid) return;
+        const { data: res } = await this.$http.post("login", this.usermess);
+        if (res.meta.status !== 200) return this.$message.error("登陆失败");
+        return this.$message.success("登陆成功");
       });
     },
   },
