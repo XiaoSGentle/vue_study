@@ -1,23 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import Login from '../components/Login.vue'
+import '../assets/css/global.css'
+import axios from 'axios'
 
-Vue.use(VueRouter)
+
+Vue.use(ElementUI);
+Vue.use(VueRouter);
+//配置请求的根路径
+axios.defaults.baseURL = 'http://1.15.141.230:8888/api/private/v1/'
+Vue.prototype.$http = axios;
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+  { path: '/', redirect: '/login' },
+  { path: '/login', component: Login }
 ]
 
 const router = new VueRouter({
