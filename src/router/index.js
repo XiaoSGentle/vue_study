@@ -12,6 +12,11 @@ Vue.use(ElementUI);
 Vue.use(VueRouter);
 //配置请求的根路径
 axios.defaults.baseURL = 'http://1.15.141.230:8888/api/private/v1/'
+
+axios.interceptors.request.use(config => {
+  config.headers.Authorization = window.sessionStorage.getItem('token');
+  return config;
+})
 Vue.prototype.$http = axios;
 Vue.prototype.$message = Message;
 
