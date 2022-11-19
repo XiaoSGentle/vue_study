@@ -13,21 +13,25 @@
         <!-- 侧边栏菜单区域 -->
         <el-menu background-color="#373d41" text-color="#eaedfe">
           <!-- 一级菜单 -->
-          <el-submenu index="1">
+          <el-submenu
+            :index="item.id + ''"
+            v-for="item in menulist"
+            :key="item.id"
+          >
             <template slot="title">
               <!-- 图标 -->
-              <i class="el-icon-location"></i>
-              <span>导航一</span>
+              <i :class="iconsObj[item.id]"></i>
+              <span>{{ item.authName }}</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item index="1-4-1">
-              <i class="el-icon-location"> </i>
-              选项1
-            </el-menu-item>
-            <el-menu-item index="1-4-1">
-              <i class="el-icon-location"> </i>
-              选项1</el-menu-item
+            <el-menu-item
+              :index="subItem.id"
+              v-for="subItem in item.children"
+              :key="subItem.id"
             >
+              <i class="el-icon-menu"> </i>
+              {{ subItem.authName }}
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -39,12 +43,39 @@
 
 <script>
 export default {
+  data() {
+    return {
+      //目录的数组
+      menulist: [],
+      //一级目录的图标
+      iconsObj: {
+        125: "iconfont icon-wode",
+        103: "iconfont icon-tupian",
+        101: "iconfont icon-xinxi",
+        102: "iconfont icon-dingdan",
+        145: "iconfont icon-rili",
+      },
+    };
+  },
+  created() {
+    this.getMenuList();
+  },
   methods: {
+    //退出登录
     loginout() {
       //清除token
       window.sessionStorage.clear();
       //跳转登陆页面
       this.$router.push("/login");
+    },
+    //获取目录的数据
+    async getMenuList() {
+      //请求数据
+      const { data: res } = await this.$http.get("menus");
+      console.log(res);
+      //判断状态码
+      if (res.meta.status !== 200) return this.$message.error(res.meta.meg);
+      this.menulist = res.data;
     },
   },
 };
