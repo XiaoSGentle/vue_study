@@ -1,0 +1,7 @@
+{
+    // 移除引号
+    "semi": false,
+        //使用单引号
+        "singleQuote": true
+
+}

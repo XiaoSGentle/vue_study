@@ -75,6 +75,8 @@ export default {
         if (!valid) return;
         const { data: res } = await this.$http.post("login", this.usermess);
         if (res.meta.status !== 200) return this.$message.error("登陆失败");
+        window.sessionStorage.setItem("token", res.data.token);
+        this.$router.push("/home");
         return this.$message.success("登陆成功");
       });
     },
