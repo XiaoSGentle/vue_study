@@ -9,9 +9,16 @@
     <!--主体 -->
     <el-container>
       <!-- 左侧边栏 -->
-      <el-aside width="200px">
+      <el-aside :width="isCollapse ? '65px' : '200px'">
         <!-- 侧边栏菜单区域 -->
-        <el-menu background-color="#373d41" text-color="#eaedfe">
+        <el-menu
+          background-color="#373d41"
+          text-color="#eaedfe"
+          :unique-opened="true"
+          :collapse="isCollapse"
+          :collapse-transition="false"
+        >
+          <div class="toggle_top" @click="toggle_show">|||</div>
           <!-- 一级菜单 -->
           <el-submenu
             :index="item.id + ''"
@@ -25,7 +32,7 @@
             </template>
             <!-- 二级菜单 -->
             <el-menu-item
-              :index="subItem.id"
+              :index="subItem.id + ''"
               v-for="subItem in item.children"
               :key="subItem.id"
             >
@@ -55,12 +62,18 @@ export default {
         102: "iconfont icon-dingdan",
         145: "iconfont icon-rili",
       },
+      //侧边栏不折叠
+      isCollapse: false,
     };
   },
   created() {
     this.getMenuList();
   },
   methods: {
+    //侧边栏的显示与折叠
+    toggle_show() {
+      this.isCollapse = !this.isCollapse;
+    },
     //退出登录
     loginout() {
       //清除token
@@ -82,6 +95,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.toggle_top {
+  color: #fff;
+  font-size: 10px;
+  line-height: 30px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-align: center;
+  background-color: #424b5c;
+}
 .home-container {
   height: 100vh;
 }
@@ -101,6 +123,9 @@ export default {
 }
 .el-aside {
   background-color: #333744;
+}
+.em-menu {
+  border-right: none;
 }
 .el-main {
   background-color: #eaedfe;
