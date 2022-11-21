@@ -17,6 +17,8 @@
           :unique-opened="true"
           :collapse="isCollapse"
           :collapse-transition="false"
+          router
+          :default-active="activepath"
         >
           <div class="toggle_top" @click="toggle_show">|||</div>
           <!-- 一级菜单 -->
@@ -32,9 +34,10 @@
             </template>
             <!-- 二级菜单 -->
             <el-menu-item
-              :index="subItem.id + ''"
+              :index="'/' + subItem.path"
               v-for="subItem in item.children"
               :key="subItem.id"
+              @click="saveNavState('/' + subItem.path)"
             >
               <i class="el-icon-menu"> </i>
               {{ subItem.authName }}
@@ -43,7 +46,10 @@
         </el-menu>
       </el-aside>
       <!-- 右侧主体 -->
-      <el-main> </el-main>
+      <el-main>
+        <!--路由占位符 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -64,12 +70,21 @@ export default {
       },
       //侧边栏不折叠
       isCollapse: false,
+      //二级菜单激活的地址
+      activepath: "",
     };
   },
   created() {
     this.getMenuList();
+    //动态绑定二级的激活 菜单
+    this.activepath = window.sessionStorage.getItem("activepath");
   },
   methods: {
+    //二级菜单高亮
+    saveNavState(activepath) {
+      window.sessionStorage.getItem("activepath", activepath);
+      this.activepath = activepath;
+    },
     //侧边栏的显示与折叠
     toggle_show() {
       this.isCollapse = !this.isCollapse;
